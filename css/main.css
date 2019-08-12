@@ -1,0 +1,23 @@
+div#log {
+    font-family: "monospace";
+}
+
+div.log {
+    color: blue;
+}
+
+div.info {
+    color: black;
+}
+
+div.debug {
+    color: darkslategray;
+}
+
+div.warn {
+    color: coral;
+}
+
+div.error {
+    color: darkred;
+}
