@@ -1,32 +1,42 @@
 import './css/main.css';
-import {Observable} from 'rxjs';
+import {from, of} from "rxjs";
 
-// ****
-//
-// Welcome to your rxjs scratch pad 🤗
-// 
-// ****
+const arraySource$ = from([1, 2, 3]);
 
-//
-// const source$: Observable<number> = Observable.create((observer) => {
-//     let i = 1;
-//     const id = setInterval(() => {
-//         observer.next(i++);
-//     }, 1000);
-// });
+arraySource$.subscribe(
+    (data) => console.log('arraySource$', data),
+    console.warn,
+    () => console.log('complete')
+);
 
-const source$ = new Observable<number>((observer) => {
-    let i = 1;
-    setInterval(() => {
-        observer.next(i++);
-        if (i == 20) {
-            observer.complete();
-        }
-    }, 1000);
+const observableSource$ = from(of(1,2,3));
+
+arraySource$.subscribe(
+    (data) => console.log('observableSource$', data),
+    console.warn,
+    () => console.log('complete')
+);
+
+const vPromise = new Promise<number>((resolve, reject) => {
+    setTimeout(() => resolve(1), 1000);
 });
 
-source$.subscribe(
-    console.log,
+const promiseSource$ = from(vPromise);
+
+promiseSource$.subscribe(
+    (data) => console.log('promiseSource$', data),
     console.warn,
+    () => console.log('complete')
+);
+
+const rejectedPromise = new Promise<number>((resolve, reject) => {
+    setTimeout(() => reject("error"), 1000);
+});
+
+const rejectedPromiseSource$ = from(rejectedPromise);
+
+rejectedPromiseSource$.subscribe(
+    console.log,
+    (errorMessage) => console.warn('rejectedPromiseSource$', errorMessage),
     () => console.log('complete')
 );
