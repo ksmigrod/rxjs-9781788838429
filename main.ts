@@ -1,32 +1,39 @@
 import './css/main.css';
-import {Observable} from 'rxjs';
+import {ConnectableObservable, interval} from "rxjs";
+import {publishReplay, take} from "rxjs/operators";
 
-// ****
-//
-// Welcome to your rxjs scratch pad 🤗
-// 
-// ****
+const intervalSource$ = interval(1000);
+const hotBufferedSource$ = intervalSource$.pipe(take(6), publishReplay(2)) as ConnectableObservable<number>;
 
-//
-// const source$: Observable<number> = Observable.create((observer) => {
-//     let i = 1;
-//     const id = setInterval(() => {
-//         observer.next(i++);
-//     }, 1000);
-// });
-
-const source$ = new Observable<number>((observer) => {
-    let i = 1;
-    setInterval(() => {
-        observer.next(i++);
-        if (i == 20) {
-            observer.complete();
-        }
-    }, 1000);
-});
-
-source$.subscribe(
-    console.log,
+hotBufferedSource$.subscribe(
+    (data) => console.log('Hot buffered observer 0', data),
     console.warn,
-    () => console.log('complete')
+    () => console.log('complete 0')
 );
+
+hotBufferedSource$.connect();
+
+setTimeout(() => {hotBufferedSource$.subscribe(
+    (data) => console.log('Hot buffered observer 1', data),
+    console.warn,
+    () => console.log('complete 1')
+);}, 1050);
+
+setTimeout(() => {hotBufferedSource$.subscribe(
+    (data) => console.log('Hot buffered observer 2', data),
+    console.warn,
+    () => console.log('complete 2')
+);}, 2050);
+
+setTimeout(() => {hotBufferedSource$.subscribe(
+    (data) => console.log('Hot buffered observer 3', data),
+    console.warn,
+    () => console.log('complete 3')
+);}, 3050);
+
+setTimeout(() => {hotBufferedSource$.subscribe(
+    (data) => console.log('Hot buffered observer 4', data),
+    console.warn,
+    () => console.log('complete 4')
+);}, 4050);
+
