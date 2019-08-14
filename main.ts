@@ -1,5 +1,6 @@
-import './css/main.css';
-import {Observable} from 'rxjs';
+import './css/main.scss';
+import 'bootstrap';
+import {BehaviorSubject, fromEvent, Observable} from 'rxjs';
 
 // ****
 //
@@ -15,18 +16,29 @@ import {Observable} from 'rxjs';
 //     }, 1000);
 // });
 
-const source$ = new Observable<number>((observer) => {
-    let i = 1;
-    setInterval(() => {
-        observer.next(i++);
-        if (i == 20) {
-            observer.complete();
-        }
-    }, 1000);
-});
+const source$ = (() => {
+    const tmp$ = new BehaviorSubject<number>(1);
+    fromEvent(document.querySelector('#incrementBy1'), 'click')
+        .subscribe(() => {
+            tmp$.next(1);
+        });
+    fromEvent(document.querySelector('#incrementBy2'), 'click')
+        .subscribe(() => {
+            tmp$.next(2);
+        });
+    return tmp$.asObservable();
+})();
 
-source$.subscribe(
-    console.log,
-    console.warn,
-    () => console.log('complete')
-);
+function createCounter(selector: string, stepObservable$: Observable<number>): void {
+    const display: HTMLInputElement = document.querySelector(selector);
+    let counter = 0;
+    let step = 1;
+
+    stepObservable$.subscribe((data) => step = data);
+    setInterval(() => {
+        counter = counter + step;
+        display.value = String(counter);
+    }, 1000);
+}
+
+createCounter('#counter', source$);

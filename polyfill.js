@@ -1,5 +1,3 @@
-import 'normalize.css';
-
 console.log('polyfill');
 var log = document.querySelector('#log');
 ['log','debug','info','warn','error'].forEach(function (verb) {

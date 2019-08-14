@@ -7,7 +7,40 @@
 </head>
 
 <body>
-    <div id="log"></div>
+    <div class="container-fluid">
+        <form>
+            <div class="row">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Incerment</h5>
+                        </div>
+                        <div class="card-body">
+                            <input type="button" id="incrementBy1" class="btn btn-primary form-control" role="button"
+                                   value="Increment by 1"/>
+                            <input type="button" id="incrementBy2" class="btn btn-info form-control" role="button"
+                                   value="Increment by 2"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Count</h5>
+                        </div>
+                        <div class="card-body">
+                            <input type="number" class="form-control" id="counter" value="0"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-12">
+                <div id="log"></div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
