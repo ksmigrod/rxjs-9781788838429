@@ -1,32 +1,33 @@
 import './css/main.css';
-import {Observable} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 
-// ****
-//
-// Welcome to your rxjs scratch pad 🤗
-// 
-// ****
+const source$ = new ReplaySubject<number>(2);
+let counter = 0;
 
-//
-// const source$: Observable<number> = Observable.create((observer) => {
-//     let i = 1;
-//     const id = setInterval(() => {
-//         observer.next(i++);
-//     }, 1000);
-// });
+setInterval(() => source$.next(counter++), 500);
 
-const source$ = new Observable<number>((observer) => {
-    let i = 1;
-    setInterval(() => {
-        observer.next(i++);
-        if (i == 20) {
-            observer.complete();
-        }
-    }, 1000);
-});
+setTimeout( () => source$.complete(), 3050);
 
 source$.subscribe(
-    console.log,
+    (data) => console.log('Subscription 0', data),
     console.warn,
     () => console.log('complete')
 );
+
+setTimeout(() => source$.subscribe(
+    (data) => console.log('Subscription 1', data),
+    console.warn,
+    () => console.log('complete')
+), 1070);
+
+setTimeout(() => source$.subscribe(
+    (data) => console.log('Subscription 2', data),
+    console.warn,
+    () => console.log('complete')
+), 2070);
+
+setTimeout(() => source$.subscribe(
+    (data) => console.log('Subscription 3', data),
+    console.warn,
+    () => console.log('complete')
+), 3070);
