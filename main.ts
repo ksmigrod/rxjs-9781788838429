@@ -1,32 +1,27 @@
 import './css/main.css';
-import {Observable} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 
-// ****
-//
-// Welcome to your rxjs scratch pad 🤗
-// 
-// ****
+const source$ = new Subject<number>();
+let counter = 0;
 
-//
-// const source$: Observable<number> = Observable.create((observer) => {
-//     let i = 1;
-//     const id = setInterval(() => {
-//         observer.next(i++);
-//     }, 1000);
-// });
+setInterval(() => source$.next(counter++), 1000);
 
-const source$ = new Observable<number>((observer) => {
-    let i = 1;
-    setInterval(() => {
-        observer.next(i++);
-        if (i == 20) {
-            observer.complete();
-        }
-    }, 1000);
-});
+setTimeout( () => source$.complete(), 6050);
 
 source$.subscribe(
-    console.log,
+    (data) => console.log('Subscription 0', data),
     console.warn,
     () => console.log('complete')
 );
+
+setTimeout(() => source$.subscribe(
+    (data) => console.log('Subscription 1', data),
+    console.warn,
+    () => console.log('complete')
+), 1050);
+
+setTimeout(() => source$.subscribe(
+    (data) => console.log('Subscription 2', data),
+    console.warn,
+    () => console.log('complete')
+), 2050);
