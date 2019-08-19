@@ -1,5 +1,6 @@
 import './css/main.css';
-import {Observable} from 'rxjs';
+import {range} from "rxjs";
+import {map} from "rxjs/operators";
 
 // ****
 //
@@ -15,17 +16,13 @@ import {Observable} from 'rxjs';
 //     }, 1000);
 // });
 
-const source$ = new Observable<number>((observer) => {
-    let i = 1;
-    setInterval(() => {
-        observer.next(i++);
-        if (i == 20) {
-            observer.complete();
-        }
-    }, 1000);
-});
+const source$ = range(0,2);
 
-source$.subscribe(
+const mappedSource$ = source$.pipe(
+    map((x) => x - 1),
+);
+
+mappedSource$.subscribe(
     console.log,
     console.warn,
     () => console.log('complete')
