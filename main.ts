@@ -1,5 +1,6 @@
 import './css/main.css';
-import {Observable} from 'rxjs';
+import {pipe, range} from 'rxjs';
+import {filter, map} from "rxjs/operators";
 
 // ****
 //
@@ -7,25 +8,17 @@ import {Observable} from 'rxjs';
 // 
 // ****
 
-//
-// const source$: Observable<number> = Observable.create((observer) => {
-//     let i = 1;
-//     const id = setInterval(() => {
-//         observer.next(i++);
-//     }, 1000);
-// });
+const source$ = range(0, 10);
 
-const source$ = new Observable<number>((observer) => {
-    let i = 1;
-    setInterval(() => {
-        observer.next(i++);
-        if (i == 20) {
-            observer.complete();
-        }
-    }, 1000);
-});
+const doubleValue = map((x: number) => x * 2);
+const filterMoreThan5 = filter((x: number) => x <= 5);
 
-source$.subscribe(
+const customOperator = pipe(
+    doubleValue,
+    filterMoreThan5,
+);
+
+source$.pipe(customOperator).subscribe(
     console.log,
     console.warn,
     () => console.log('complete')
