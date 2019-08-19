@@ -16,10 +16,16 @@ import {map} from "rxjs/operators";
 //     }, 1000);
 // });
 
-const source$ = range(0,2);
+const source$ = range(0, 2);
 
 const mappedSource$ = source$.pipe(
-    map((x) => x - 1),
+    map((x) => {
+        if (x > 0) {
+            throw 'X is positive';
+        } else {
+            return x;
+        }
+    }),
 );
 
 mappedSource$.subscribe(
